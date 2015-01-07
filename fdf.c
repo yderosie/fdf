@@ -6,7 +6,7 @@
 /*   By: yderosie <yderosie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/05 18:28:39 by yderosie          #+#    #+#             */
-/*   Updated: 2015/01/06 05:39:37 by yderosie         ###   ########.fr       */
+/*   Updated: 2015/01/07 22:12:06 by yderosie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,23 @@ int		draw(void *mlx, void *win, int y, int x)
 
 int		key_hook(int keycode, t_env *e)
 {
+	if (keycode == 65362)
+		e->decallage_y = e->decallage_y - 1;
+	if (keycode == 65364)
+		e->decallage_y = e->decallage_y + 1;
+	if (keycode == 65361)
+		e->decallage_x = e->decallage_x - 1;
+	if (keycode == 65363)
+		e->decallage_x = e->decallage_x + 1;
+	if (keycode == 112)
+		e->cte = (e->cte + 0.2);
+	if (keycode == 111)
+		e->cte = (e->cte - 0.2);
 	if (keycode == 65451)
-	{
 		e->taille = e->taille + 1;
-		expose_hook(&(*e));
-	}
 	if (keycode == 65453)
-	{
 		e->taille = e->taille - 1;
-		expose_hook(&(*e));
-	}
+	expose_hook(&(*e));
 	if (keycode == 65307)
 		exit (0);
 	return (0);
@@ -57,17 +64,12 @@ int		expose_hook(t_env *e)
 		x = 0;
 		while (x < e->line.c)
 		{
-			e->x = (x * e->taille) + CTE * e->xy[y][x];
-			if ((e->xy[y][x] > 0) || ((e->xy[y][x + 1] > 0) && e->xy[y + 1][x] > 0))
-				e->alt = 1;
-			else if (e->xy[y][x] < 0)
-				e->alt = -1;
-			else
-				e->alt = 0;
-			e->y = (y * e->taille) + (CTE / 2) * e->xy[y][x];
-			maillon = new_maillon(e->x, e->y, e->alt);
+			e->x = ((x + e->decallage_x) * e->taille) + e->cte * e->xy[y][x];
+			e->alt = e->xy[y][x];
+			e->y = ((y + e->decallage_y) * e->taille) + (e->cte / 2) * e->xy[y][x];
+			maillon = new_maillon(e->x, e->y, e->alt, 0);
 			if (list == NULL)
-				list = new_maillon(e->x, e->y, e->alt);
+				list = new_maillon(e->x, e->y, e->alt, 1);
 			else
 				list = liste(list, maillon);
 			x++;
@@ -79,6 +81,13 @@ int		expose_hook(t_env *e)
 	return (0);
 }
 
+int color(t_env *e)
+{ 
+	return ((RGB(127.5 * (cos(e->alt) + 1),
+		127.5 * (sin(e->alt) + 1),
+		127.5 * (1 - cos(e->alt)))));
+}
+
 void	draw_cas_un(float x1, float y1, float x2, float y2, t_env *e)
 {
 	float x;
@@ -86,15 +95,7 @@ void	draw_cas_un(float x1, float y1, float x2, float y2, t_env *e)
 	x = x1;
 	while (x <= x2)
 	{
-		if (e->alt > 0)
-			mlx_pixel_put(e->mlx, e->win, x, y1 + ((y2 - y1) * (x - x1)) / (x2 - x1),
-				0xFFFFFF);
-		else if (e->alt < 0)
-			mlx_pixel_put(e->mlx, e->win, x, y1 + ((y2 - y1) * (x - x1)) / (x2 - x1),
-				0x0000FF);
-		else
-			mlx_pixel_put(e->mlx, e->win, x, y1 + ((y2 - y1) * (x - x1)) / (x2 - x1),
-				0xAA0000);
+			mlx_pixel_put(e->mlx, e->win, x, y1 + ((y2 - y1) * (x - x1)) / (x2 - x1)				,color(&(*e)));
 		x++;
 	}
 }
@@ -106,65 +107,51 @@ void	draw_cas_deux(float x1, float y1, float x2, float y2, t_env *e)
 	y = y2;
 	while (y <= y1)
 	{
-		if (e->alt > 0)
-			mlx_pixel_put(e->mlx, e->win, x1 + ((x2 - x1) * (y - y1)) / (y2 - y1), y,
-				0xFFFFFF);
-		else if (e->alt > 0)
-			mlx_pixel_put(e->mlx, e->win, x1 + ((x2 - x1) * (y - y1)) / (y2 - y1), y,
-				0x0000FF);
-		else
-			mlx_pixel_put(e->mlx, e->win, x1 + ((x2 - x1) * (y - y1)) / (y2 - y1), y,
-				0xAA0000);
+			mlx_pixel_put(e->mlx, e->win, x1 + ((x2 - x1) * (y - y1)) / (y2 - y1), y				,color(&(*e)));
 		y++;
 	}
 }
 
 void	verif_cas_un(t_coordonner *c, t_env *e)
 {
-	float		x1;
-	float		y1;
-	float		x2;
-	float		y2;
+	t_diff	d;
 
 	while (c->next != NULL)
 	{
-		x1 = c->x;
-		y1 = c->y;
-		x2 = c->next->x;
-		y2 = c->next->y;
+		d.x1 = c->x;
+		d.y1 = c->y;
+		d.x2 = c->next->x;
+		d.y2 = c->next->y;
 		e->alt = c->alt;
-		if (x1 <= x2 && (x2 - x1) >= abs(y2 - y1))
-			draw_cas_un(x1, y1, x2, y2, &(*e));
+		if (d.x1 <= d.x2 && (d.x2 - d.x1) >= abs(d.y2 - d.y1))
+			draw_cas_un(d.x1, d.y1, d.x2, d.y2, &(*e));
 		c = c->next;
 	}
 }
 
 void	verif_cas_deux(t_coordonner *c, t_env *e)
 {
-	float	x1;
-	float	x2;
-	float	y1;
-	float	y2;
-	t_coordonner *nbl;
+	t_diff			d;
+	t_coordonner	*nbl;
 	int i;
 
 	nbl = c;
 	while (c->next != NULL)
 	{
-		x1 = c->x;
-		y1 = c->y;
+		d.x1 = c->x;
+		d.y1 = c->y;
 		e->alt = c->alt;
-		i = 0;
-		while (i <= e->line.c && nbl->next != NULL)
+		i = -1;
+		while (++i <= e->line.c && nbl->next != NULL)
 		{
 			nbl = nbl->next;
-			x2 = nbl->x;
-			y2 = nbl->y;
-/*			if (x1 <= x2 && (x2 - x1) >= abs(y2 - y1))
-				draw_cas_un(x1, y1, x2, y2, &(*e));
-*/			if (((i == e->line.c) && (y1 <= y2 && (y2 - y1) >= abs(x2 - x1)) && (x1 				!= 0 && x2 != 0)) || (x1 == 0 && x2 == 0))
-				draw_cas_deux(x2, y2, x1, y1, &(*e));
-			i++;
+			d.x2 = nbl->x;
+			d.y2 = nbl->y;
+			if (((i == e->line.c) && (d.y1 <= d.y2 && (d.y2 - d.y1) >=
+				abs(d.x2 - d.x1)) && (d.x1 != 0 && d.x2 != 0) && (!c->first)) ||
+					((d.x1 == 0 && d.x2 == 0) || (c->first)))
+				draw_cas_deux(d.x2, d.y2, d.x1, d.y1, &(*e));
+			//i++;
 		}
 		nbl = c;
 		c = c->next;
@@ -182,7 +169,7 @@ t_coordonner	*liste(t_coordonner *point, t_coordonner *maillon)
 	return (point);
 }
 
-t_coordonner	*new_maillon(int x, int y, int alt)
+t_coordonner	*new_maillon(int x, int y, int alt, int first)
 {
 	t_coordonner	*point;
 
@@ -192,6 +179,7 @@ t_coordonner	*new_maillon(int x, int y, int alt)
 	point->x = x;
 	point->y = y;
 	point->alt = alt;
+	point->first = first;
 	point->next = NULL;
 	return (point);
 }
@@ -208,6 +196,9 @@ int		ft_call(int **xy, t_line *l)
 	e.xy = xy;
 	e.line = (*l);
 	e.taille = 10;
+	e.cte = -2;
+	e.decallage_x = 0;
+	e.decallage_y = 0;
 	mlx_key_hook(e.win, key_hook, &e);
 /*	y = 0;
 	while (y < l->l)
