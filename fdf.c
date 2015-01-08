@@ -6,7 +6,7 @@
 /*   By: yderosie <yderosie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/05 18:28:39 by yderosie          #+#    #+#             */
-/*   Updated: 2015/01/07 22:12:06 by yderosie         ###   ########.fr       */
+/*   Updated: 2015/01/08 01:53:18 by yderosie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ void	verif_cas_un(t_coordonner *c, t_env *e)
 		d.x2 = c->next->x;
 		d.y2 = c->next->y;
 		e->alt = c->alt;
-		if (d.x1 <= d.x2 && (d.x2 - d.x1) >= abs(d.y2 - d.y1))
+//		if (d.x1 <= d.x2 && (d.x2 - d.x1) >= abs(d.y2 - d.y1))
 			draw_cas_un(d.x1, d.y1, d.x2, d.y2, &(*e));
 		c = c->next;
 	}
@@ -147,9 +147,8 @@ void	verif_cas_deux(t_coordonner *c, t_env *e)
 			nbl = nbl->next;
 			d.x2 = nbl->x;
 			d.y2 = nbl->y;
-			if (((i == e->line.c) && (d.y1 <= d.y2 && (d.y2 - d.y1) >=
-				abs(d.x2 - d.x1)) && (d.x1 != 0 && d.x2 != 0) && (!c->first)) ||
-					((d.x1 == 0 && d.x2 == 0) || (c->first)))
+			if (((i == e->line.c) && (/*(d.y1 <= d.y2 && (d.y2 - d.y1) >=
+				abs(d.x2 - d.x1)) && */(!c->first))) || ((i == e->line.c - 1) && (c->first)))
 				draw_cas_deux(d.x2, d.y2, d.x1, d.y1, &(*e));
 			//i++;
 		}
