@@ -6,7 +6,7 @@
 /*   By: yderosie <yderosie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/05 18:28:39 by yderosie          #+#    #+#             */
-/*   Updated: 2015/01/08 01:53:18 by yderosie         ###   ########.fr       */
+/*   Updated: 2015/01/10 01:18:06 by yderosie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int		draw(void *mlx, void *win, int y, int x)
 	mlx_pixel_put(mlx, win, x, y, 0xFFFFFF);
 	return (0);
 }
+
 
 int		key_hook(int keycode, t_env *e)
 {
@@ -46,7 +47,7 @@ int		key_hook(int keycode, t_env *e)
 	expose_hook(&(*e));
 	if (keycode == 65307)
 		exit (0);
-	return (0);
+	return (keycode);
 }
 
 int		expose_hook(t_env *e)
@@ -191,14 +192,18 @@ int		ft_call(int **xy, t_line *l)
 
 //	list = NULL;
 	e.mlx = mlx_init();
-	e.win = mlx_new_window(e.mlx, 840, 840, "42");
+	e.win = mlx_new_window(e.mlx, 1400, 1400, "42");
 	e.xy = xy;
 	e.line = (*l);
 	e.taille = 10;
 	e.cte = -2;
+	e.cte2 = -0.8;
 	e.decallage_x = 0;
 	e.decallage_y = 0;
 	mlx_key_hook(e.win, key_hook, &e);
+	mlx_expose_hook(e.win, expose_hook, &e);
+//	mlx_hook(e.win, KeyPress, KeyPressMask, keypress_hook, &e);
+//	mlx_hook(e.win, KeyRelease, KeyReleaseMask, keyrelease_hook, &e);
 /*	y = 0;
 	while (y < l->l)
 	{
@@ -219,7 +224,6 @@ int		ft_call(int **xy, t_line *l)
 	}
 	verif_cas_un(list, &e);
 	verif_cas_deux(list, &e, &(*l));*/
-	mlx_expose_hook(e.win, expose_hook, &e);
 	mlx_loop(e.mlx);
 	return (0);
 }
@@ -252,7 +256,8 @@ void		tabint_xy(char **coordonner, int **xy, t_line *l)
 		(*xy)[j] = ft_atoi(coordonner[j]);
 		j++;
 	}
-	l->c = j;
+	if (j > l->c)
+		l->c = j;
 }
 
 void	tabxy(int fd, int ***xy, t_line *l)

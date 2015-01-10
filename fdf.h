@@ -6,7 +6,7 @@
 /*   By: yderosie <yderosie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/08 14:25:37 by yderosie          #+#    #+#             */
-/*   Updated: 2015/01/08 00:22:36 by yderosie         ###   ########.fr       */
+/*   Updated: 2015/01/09 04:32:34 by yderosie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ typedef struct	s_env
 	int		decallage_x;
 	int		decallage_y;
 	float	cte;
+	float	cte2;
 	t_line	line;
 }				t_env;
 
