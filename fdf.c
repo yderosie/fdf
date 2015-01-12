@@ -6,40 +6,75 @@
 /*   By: yderosie <yderosie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/05 18:28:39 by yderosie          #+#    #+#             */
-/*   Updated: 2015/01/10 01:18:06 by yderosie         ###   ########.fr       */
+/*   Updated: 2015/01/12 04:57:42 by yderosie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include "libft/libft.h"
 
-int		draw(void *mlx, void *win, int y, int x)
+void	rotate(t_coordonner *c, t_env *e)
 {
-//	int	k;
-//	int i;
-//	int	j;
-//
-/*	y = y * 40;
-	x = x * 40;*/
-	mlx_pixel_put(mlx, win, x, y, 0xFFFFFF);
-	return (0);
-}
+	t_rotate	r;
+	float		t;
 
+	r.sinx = sin(e->ax);
+	r.siny = sin(e->ay);
+	r.sinz = sin(e->az);
+	r.cosx = cos(e->ax);
+	r.cosy = cos(e->ay);
+	r.cosz = cos(e->az);
+
+	/* 1ère translation pour amener le "centre" à l'origine */
+	c->x = c->x - 420;
+	c->y = c->y - 420;
+	c->z = c->z - 0;
+
+	/* Rotation autour de l'axe x'Ox */
+	t = c->y * r.cosx - c->z * r.sinx;
+//	c->z = c->y * r.sinx + c->z * r.cosx;
+	c->y = t;
+	/* Rotation autour de l'axe y'Oy */
+	t = c->x * r.cosy + c->z * r.siny;
+//	c->z = c->z * r.cosy - c->x * r.siny;
+	c->x = t;
+	/* Rotation autour de l'axe z'Oz */
+	t = c->x * r.cosz - c->y * r.sinz;
+	c->y = c->x * r.sinz + c->y * r.cosz;
+	c->x = t;
+
+	/* Translation pour ramener le centre à sa place */
+	c->x = c->x + 420;
+	c->y = c->y + 420;
+	c->z = c->z + 0;
+}
 
 int		key_hook(int keycode, t_env *e)
 {
+	if (keycode == 65457)
+		e->ax = e->ax + 0.1;
+	if (keycode == 65459)
+		e->ax = e->ax - 0.1;
+	if (keycode == 65462) 
+		e->ay = e->ay + 0.1;
+	if (keycode == 65460)
+		e->ay = e->ay - 0.1;
+	if (keycode == 65463) 
+		e->az = e->az + 0.1;
+	if (keycode == 65465)
+		e->az = e->az - 0.1;
 	if (keycode == 65362)
-		e->decallage_y = e->decallage_y - 1;
+		e->d_y = e->d_y - 1;
 	if (keycode == 65364)
-		e->decallage_y = e->decallage_y + 1;
+		e->d_y = e->d_y + 1;
 	if (keycode == 65361)
-		e->decallage_x = e->decallage_x - 1;
+		e->d_x = e->d_x - 1;
 	if (keycode == 65363)
-		e->decallage_x = e->decallage_x + 1;
+		e->d_x = e->d_x + 1;
 	if (keycode == 112)
-		e->cte = (e->cte + 0.2);
+		e->alt2 = (e->alt2 + 1);
 	if (keycode == 111)
-		e->cte = (e->cte - 0.2);
+		e->alt2 = (e->alt2 - 1);
 	if (keycode == 65451)
 		e->taille = e->taille + 1;
 	if (keycode == 65453)
@@ -48,6 +83,19 @@ int		key_hook(int keycode, t_env *e)
 	if (keycode == 65307)
 		exit (0);
 	return (keycode);
+}
+
+void	rotate_all_list(t_coordonner **list, t_env *e)
+{
+	t_coordonner *first;
+
+	first = (*list);
+	while (first->next != NULL)
+	{
+		rotate(first, &(*e));
+		first = first->next;
+	}
+	rotate(first, &(*e));
 }
 
 int		expose_hook(t_env *e)
@@ -65,9 +113,11 @@ int		expose_hook(t_env *e)
 		x = 0;
 		while (x < e->line.c)
 		{
-			e->x = ((x + e->decallage_x) * e->taille) + e->cte * e->xy[y][x];
 			e->alt = e->xy[y][x];
-			e->y = ((y + e->decallage_y) * e->taille) + (e->cte / 2) * e->xy[y][x];
+			e->x = (e->cte * ((x + e->d_x) * e->taille)) - (e->cte2) * ((y + e->d_y) * e->taille);
+			e->y = (e->alt * e->alt2) + (e->cte / 2) * ((x + e->d_x) * e->taille) + (e->cte2 / 2) * ((y + e->d_y) * e->taille);
+//			e->x = ((x + e->d_x) * e->taille) + e->cte * e->alt;
+//			e->y = ((y + e->d_y) * e->taille) + (e->cte / 2) * e->alt;
 			maillon = new_maillon(e->x, e->y, e->alt, 0);
 			if (list == NULL)
 				list = new_maillon(e->x, e->y, e->alt, 1);
@@ -77,6 +127,7 @@ int		expose_hook(t_env *e)
 		}
 		y++;
 	}
+	rotate_all_list(&list, &(*e));
 	verif_cas_un(list, &(*e));
 	verif_cas_deux(list, &(*e));
 	return (0);
@@ -113,6 +164,19 @@ void	draw_cas_deux(float x1, float y1, float x2, float y2, t_env *e)
 	}
 }
 
+void	draw_cas_trois(float x1, float y1, float x2, float y2, t_env *e)
+{
+	float x;
+
+	x = y1;
+	while (x <= y2)
+	{
+		mlx_pixel_put(e->mlx, e->win, x1 + ((x2 - x1) * (x - y1)) / (y2 - y1) , x,
+				color(&(*e)));
+		x++;
+	}
+}
+
 void	verif_cas_un(t_coordonner *c, t_env *e)
 {
 	t_diff	d;
@@ -123,9 +187,11 @@ void	verif_cas_un(t_coordonner *c, t_env *e)
 		d.y1 = c->y;
 		d.x2 = c->next->x;
 		d.y2 = c->next->y;
-		e->alt = c->alt;
-//		if (d.x1 <= d.x2 && (d.x2 - d.x1) >= abs(d.y2 - d.y1))
+		e->alt = c->z;
+		if (d.x1 <= d.x2 && (d.x2 - d.x1) >= abs(d.y2 - d.y1))
 			draw_cas_un(d.x1, d.y1, d.x2, d.y2, &(*e));
+		if (d.y1 <= d.y2 && (d.y2 - d.y1) >= abs(d.x2 - d.x1))
+			draw_cas_trois(d.x1, d.y1, d.x2, d.y2, &(*e));
 		c = c->next;
 	}
 }
@@ -141,7 +207,7 @@ void	verif_cas_deux(t_coordonner *c, t_env *e)
 	{
 		d.x1 = c->x;
 		d.y1 = c->y;
-		e->alt = c->alt;
+		e->alt = c->z;
 		i = -1;
 		while (++i <= e->line.c && nbl->next != NULL)
 		{
@@ -149,11 +215,13 @@ void	verif_cas_deux(t_coordonner *c, t_env *e)
 			d.x2 = nbl->x;
 			d.y2 = nbl->y;
 			if (((i == e->line.c) && (/*(d.y1 <= d.y2 && (d.y2 - d.y1) >=
-				abs(d.x2 - d.x1)) && */(!c->first))) || ((i == e->line.c - 1) && (c->first)))
+				abs(d.x2 - d.x1)) && */(!c->first))) || ((i == e->line.c - 1)
+					&& (c->first)))
 				draw_cas_deux(d.x2, d.y2, d.x1, d.y1, &(*e));
-			//i++;
 		}
 		nbl = c;
+		if (d.x1 <= d.x2 && (d.x2 - d.x1) >= abs(d.y2 - d.y1))
+			draw_cas_un(d.x1, d.y1, d.x2, d.y2, &(*e));
 		c = c->next;
 	}
 }
@@ -178,7 +246,7 @@ t_coordonner	*new_maillon(int x, int y, int alt, int first)
 		return (NULL);
 	point->x = x;
 	point->y = y;
-	point->alt = alt;
+	point->z = alt;
 	point->first = first;
 	point->next = NULL;
 	return (point);
@@ -192,14 +260,18 @@ int		ft_call(int **xy, t_line *l)
 
 //	list = NULL;
 	e.mlx = mlx_init();
-	e.win = mlx_new_window(e.mlx, 1400, 1400, "42");
+	e.win = mlx_new_window(e.mlx, 840, 840, "42");
 	e.xy = xy;
 	e.line = (*l);
 	e.taille = 10;
-	e.cte = -2;
-	e.cte2 = -0.8;
-	e.decallage_x = 0;
-	e.decallage_y = 0;
+	e.cte = 2;
+	e.cte2 = 2;
+	e.d_x = 0;
+	e.d_y = 0;
+	e.ax = 0;
+	e.ay = 0;
+	e.alt2 = 0;
+	e.az = 0;
 	mlx_key_hook(e.win, key_hook, &e);
 	mlx_expose_hook(e.win, expose_hook, &e);
 //	mlx_hook(e.win, KeyPress, KeyPressMask, keypress_hook, &e);
