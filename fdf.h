@@ -6,7 +6,7 @@
 /*   By: yderosie <yderosie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/08 14:25:37 by yderosie          #+#    #+#             */
-/*   Updated: 2015/01/12 04:31:34 by yderosie         ###   ########.fr       */
+/*   Updated: 2015/01/16 13:00:07 by yderosie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,28 +30,12 @@ typedef struct	s_line
 	int c;
 }				t_line;
 
-typedef struct s_rotate
-{
-	float	sinx;
-	float	siny;
-	float	sinz;
-	float	cosx;
-	float	cosy;
-	float	cosz;
-	float	cx;
-	float	cy;
-	float	cz;
-	float	px;
-	float	py;
-	float	pz;
-}				t_rotate;
-
 typedef struct	s_diff
 {
-	float	x1;
-	float	x2;
-	float	y1;
-	float	y2;
+	double	x1;
+	double	x2;
+	double	y1;
+	double	y2;
 }				t_diff;
 
 typedef struct	s_env
@@ -63,16 +47,16 @@ typedef struct	s_env
 	int		z;
 	int		**xy;
 	double	alt;
-	float	alt2;
+	double	alt2;
 	int		taille;
 	int		d_x;
 	int		d_y;
-	float	ax;
-	float	ay;
-	float	az;
+	double	ax;
+	double	ay;
+	double	az;
 	int		first;
-	float	cte;
-	float	cte2;
+	double	cte;
+	double	cte2;
 	t_line	line;
 }				t_env;
 
