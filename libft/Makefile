@@ -6,7 +6,7 @@
 #    By: yderosie <yderosie@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/11/08 12:52:10 by yderosie          #+#    #+#              #
-#    Updated: 2014/12/17 10:53:05 by yderosie         ###   ########.fr        #
+#    Updated: 2015/01/18 15:52:47 by yderosie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -78,7 +78,7 @@ SRCS	= $(addsuffix .c, $(FILES))
 OBJ		= $(SRCS:%.c=obj/%.o)
 
 .PHONY: all clean fclean re
-.SILENT: clean fclean re all $(NAME)
+.SILENT: dirobj clean fclean re all $(NAME)
 
 all: dirobj $(NAME)
 
@@ -86,7 +86,7 @@ $(NAME): $(OBJ)
 	ar rc $(NAME) $(OBJ)
 
 obj/%.o: %.c
-	@$(CC) $(CFLAGS) -I./ -o $@ -c $^
+	$(CC) $(CFLAGS) -I./ -o $@ -c $^
 
 clean:
 	test ! -d obj || \

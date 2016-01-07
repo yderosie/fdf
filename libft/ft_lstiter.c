@@ -6,7 +6,7 @@
 /*   By: yderosie <yderosie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/13 12:47:55 by yderosie          #+#    #+#             */
-/*   Updated: 2014/11/24 14:44:19 by yderosie         ###   ########.fr       */
+/*   Updated: 2015/01/08 02:33:59 by yderosie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,13 @@
 
 void	ft_lstiter(t_list *lst, void (*f)(t_list *elem))
 {
-	if (lst == NULL)
-		return ((void)NULL);
-	while (lst != NULL)
+	if (lst && f)
 	{
-		f(lst);
-		lst = lst->next;
+		while (lst->next)
+		{
+			(*f)(lst);
+			lst = lst->next;
+		}
+		(*f)(lst);
 	}
 }

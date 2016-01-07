@@ -6,7 +6,7 @@
 /*   By: yderosie <yderosie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/07 16:19:21 by yderosie          #+#    #+#             */
-/*   Updated: 2014/11/18 10:50:04 by yderosie         ###   ########.fr       */
+/*   Updated: 2015/01/06 08:02:27 by yderosie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*ft_strmap(char const *s, char (*f)(char))
 
 	i = 0;
 	j = 0;
-	if (s == NULL)
+	if (s == NULL || f == NULL)
 		return (NULL);
 	while (s[j] != '\0')
 		j++;

@@ -6,7 +6,7 @@
 /*   By: yderosie <yderosie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/04 15:15:09 by yderosie          #+#    #+#             */
-/*   Updated: 2014/11/17 11:44:27 by yderosie         ###   ########.fr       */
+/*   Updated: 2015/01/10 03:34:09 by yderosie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 void	*ft_memccpy(void *dst, void const *src, int c, size_t n)
 {
-	char	*s1;
-	char	*s2;
-	int		i;
+	unsigned char	*s1;
+	char			*s2;
+	int				i;
 
 	i = 0;
 	s1 = dst;

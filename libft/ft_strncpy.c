@@ -6,7 +6,7 @@
 /*   By: yderosie <yderosie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/03 15:05:44 by yderosie          #+#    #+#             */
-/*   Updated: 2014/11/13 17:19:26 by yderosie         ###   ########.fr       */
+/*   Updated: 2014/12/27 16:04:02 by yderosie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 char	*ft_strncpy(char *dst, char const *src, size_t n)
 {
-	int		i;
+	size_t	i;
 	char	*s2;
 	char	*s1;
 

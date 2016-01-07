@@ -6,13 +6,13 @@
 /*   By: yderosie <yderosie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/17 10:40:23 by yderosie          #+#    #+#             */
-/*   Updated: 2014/12/17 10:53:26 by yderosie         ###   ########.fr       */
+/*   Updated: 2014/12/17 10:50:49 by yderosie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_realloc(void *ptr, size_t size)
+void	*ft_realloc(char *ptr, size_t size)
 {
 	char *s1;
 

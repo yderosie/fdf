@@ -6,7 +6,7 @@
 /*   By: yderosie <yderosie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/07 14:29:40 by yderosie          #+#    #+#             */
-/*   Updated: 2014/11/17 16:41:48 by yderosie         ###   ########.fr       */
+/*   Updated: 2015/01/06 07:12:38 by yderosie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 void	*ft_memalloc(size_t size)
 {
-	char *s2;
+	void *s2;
 
-	s2 = (char *)malloc(sizeof(char) * (1 + size));
+	s2 = (void *)malloc(size);
 	if (s2 == NULL)
 		return (NULL);
 	return (s2);

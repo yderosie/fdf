@@ -6,31 +6,37 @@
 /*   By: yderosie <yderosie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/03 15:38:03 by yderosie          #+#    #+#             */
-/*   Updated: 2014/11/17 14:08:09 by yderosie         ###   ########.fr       */
+/*   Updated: 2015/01/10 03:31:02 by yderosie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strnstr(char const *s1, char const *s2, size_t n)
+char	*ft_strnstr(const char *s1, const char *s2, size_t n)
 {
-	int		i;
+	char	c;
+	char	i;
+	size_t	len;
 	int		j;
 
-	i = 0;
 	j = 0;
-	if (s2[0] == '\0')
-		return ((char *)s1);
-	while (n > 0 && s1[i] != '\0')
+	if ((c = *s2++) != '\0')
 	{
-		if (s1[i] == s2[j])
-			j++;
-		else
-			j = 0;
-		if (s2[j] == '\0')
-			return ((char *)s1 + (i - (j - 1)));
-		i++;
-		n--;
+		len = ft_strlen(s2);
+		while (!j || ft_strncmp(s1, s2, len) != 0)
+		{
+			j = 1;
+			if ((i = *s1++) == '\0' || n-- < 1)
+				return (NULL);
+			while (i != c)
+			{
+				if ((i = *s1++) == '\0' || n-- < 1)
+					return (NULL);
+			}
+			if (len > n)
+				return (NULL);
+		}
+		s1--;
 	}
-	return (NULL);
+	return ((char *)s1);
 }

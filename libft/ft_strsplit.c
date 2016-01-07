@@ -6,11 +6,12 @@
 /*   By: yderosie <yderosie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/08 10:21:29 by yderosie          #+#    #+#             */
-/*   Updated: 2014/12/23 14:30:43 by yderosie         ###   ########.fr       */
+/*   Updated: 2014/12/27 15:51:12 by yderosie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <stdio.h>
 
 static size_t	ft_sizek(char *s, char c)
 {
@@ -40,16 +41,14 @@ static char		**ft_strsplit_2(char const *s, char c)
 	while (s1[++i] != '\0')
 	{
 		j = 0;
-		s2[k] = (char *)malloc(sizeof(char) * (ft_sizek(s1 + i, c) + 2));
+		s2[k] = (char *)malloc(sizeof(char) * (ft_sizek(s1 + i, c) + 1));
 		while (s1[i] != c && s1[i] != '\0')
 			s2[k][j++] = s1[i++];
 		while (s1[i] == c && s1[i + 1] == c)
 			i++;
-//		s2[k][j] = '\0';
 		if (s1[i] == c && s1[i + 1] != c)
 			k++;
 	}
-//	s2[k] = '\0';
 	return (s2);
 }
 

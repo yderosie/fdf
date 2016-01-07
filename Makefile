@@ -15,7 +15,10 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 FLAGSMLX = -L/usr/X11/lib -lmlx -lXext -lX11
 
-FILES = 	fdf
+FILES = 	fdf		\
+			draw	\
+			hook	\
+			tabxy
 
 SRCS	= $(addsuffix .c, $(FILES))
 OBJ		= $(SRCS:%.c=obj/%.o)
@@ -28,7 +31,7 @@ all: dirobj $(NAME)
 $(NAME): $(OBJ)
 	@make -C libft/ fclean
 	@make -C libft/
-	@$(CC) $(FLAGSMLX) -I./ -o $(NAME) $(OBJ)
+	@$(CC) $(FLAGSMLX) -I./ -o $(NAME) $(OBJ) libft/libft.a
 
 obj/%.o: %.c
 	@$(CC) $(CFLAGS) $(FLAGSMLX) -I./ -o $@ -c $^

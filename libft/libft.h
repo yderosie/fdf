@@ -6,7 +6,7 @@
 /*   By: yderosie <yderosie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/08 15:11:29 by yderosie          #+#    #+#             */
-/*   Updated: 2014/12/17 10:53:44 by yderosie         ###   ########.fr       */
+/*   Updated: 2015/01/18 21:58:01 by yderosie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 # define LIBFT_H
 
+# include "get_next_line.h"
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
@@ -82,7 +83,6 @@ void			ft_lstdelone(t_list **alst, void (*del)(void *, size_t));
 void			ft_lstdel(t_list **alst, void (*del)(void *, size_t));
 void			ft_lstadd(t_list **alst, t_list *new);
 void			ft_lstiter(t_list *lst, void (*f)(t_list *elem));
-int				get_next_line(int const fd, char **line);
-void			*ft_realloc(void *ptr, size_t size);
+t_list			*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem));
 
 #endif

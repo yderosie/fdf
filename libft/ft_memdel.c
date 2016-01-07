@@ -6,7 +6,7 @@
 /*   By: yderosie <yderosie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/07 14:39:46 by yderosie          #+#    #+#             */
-/*   Updated: 2014/11/12 09:41:06 by yderosie         ###   ########.fr       */
+/*   Updated: 2015/01/06 07:58:09 by yderosie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 void	ft_memdel(void **ap)
 {
+	if (ap == NULL)
+		return ((void)NULL);
 	free(*ap);
 	*ap = NULL;
 }

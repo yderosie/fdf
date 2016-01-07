@@ -6,7 +6,7 @@
 /*   By: yderosie <yderosie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/07 16:48:08 by yderosie          #+#    #+#             */
-/*   Updated: 2014/11/18 10:50:34 by yderosie         ###   ########.fr       */
+/*   Updated: 2015/01/06 08:02:43 by yderosie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 	s2 = (char *)s;
 	i = 0;
 	j = 0;
-	if (s == NULL)
+	if (s == NULL || f == NULL)
 		return (NULL);
 	while (s2[j] != '\0')
 		j++;
